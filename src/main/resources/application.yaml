@@ -2,3 +2,20 @@ spring:
   application:
     name: effective-mobile-test
 
+  jpa:
+    show-sql: true
+
+  liquibase:
+    change-log: classpath:db/migration/db.changelog-master.yaml
+
+  datasource:
+    url: jdbc:postgresql://${PG_HOST}:${PG_PORT}/${PG_DB}
+    username: ${PG_USER}
+    password: ${PG_PASS}
+    driver-class-name: org.postgresql.Driver
+
+encryption:
+  secret-key: ${ENCRYPTION_SECRET_KEY}
+
+server:
+  port: ${APP_PORT}

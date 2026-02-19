@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001_insert_users_table
+      author: test
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: username
+                  value: "administrator"
+              - column:
+                  name: password
+                  value: "$2a$12$sv.o/ByljOT4CEmFlKLC0Oi06IogvoeO0gnKH0qfspylVY.qIOaaO" # для пароля testpassword(cost 12)
+              - column:
+                  name: role
+                  value: "ADMIN"
+              - column:
+                  name: enabled
+                  valueBoolean: true
+              - column:
+                  name: created_at
+                  valueDate: "2026-02-19T12:00:00"

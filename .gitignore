@@ -26,6 +26,9 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
+### Env File ###
+.env
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

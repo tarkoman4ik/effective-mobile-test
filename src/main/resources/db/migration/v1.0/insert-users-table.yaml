@@ -11,7 +11,7 @@ databaseChangeLog:
                   value: "administrator"
               - column:
                   name: password
-                  value: "$2a$12$sv.o/ByljOT4CEmFlKLC0Oi06IogvoeO0gnKH0qfspylVY.qIOaaO" # для пароля testpassword(cost 12)
+                  value: "$2a$12$sv.o/ByljOT4CEmFlKLC0Oi06IogvoeO0gnKH0qfspylVY.qIOaaO" # для пароля testpassword
               - column:
                   name: role
                   value: "ADMIN"

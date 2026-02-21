@@ -1,1 +1,244 @@
-# Здесь будет OpenAPI описание всех доступных эндпоинтов и моделей данных.
+openapi: 3.1.0
+info:
+  title: BankCards API
+  description: API для системы управления банковскими картами
+  contact:
+    name: Tarkoman4ik
+    email: tarkoman4ik@vk.com
+  version: "1.0"
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+security:
+- bearerAuth: []
+paths:
+  /api/v1/admin/cards/{cardId}/status:
+    put:
+      tags:
+      - admin-controller
+      operationId: updateCardStatus
+      parameters:
+      - name: cardId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: status
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+          - ACTIVE
+          - BLOCKED
+          - EXPIRED
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CardResponse"
+  /api/v1/auth/login:
+    post:
+      tags:
+      - auth-controller
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/JwtResponse"
+  /api/v1/admin/users:
+    post:
+      tags:
+      - admin-controller
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+  /api/v1/admin/cards:
+    post:
+      tags:
+      - admin-controller
+      operationId: createCard
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCardRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CardResponse"
+components:
+  schemas:
+    CardResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        maskedCardNumber:
+          type: string
+        expiryDate:
+          type: object
+          properties:
+            year:
+              type: integer
+              format: int32
+            month:
+              type: string
+              enum:
+              - JANUARY
+              - FEBRUARY
+              - MARCH
+              - APRIL
+              - MAY
+              - JUNE
+              - JULY
+              - AUGUST
+              - SEPTEMBER
+              - OCTOBER
+              - NOVEMBER
+              - DECEMBER
+            monthValue:
+              type: integer
+              format: int32
+            leapYear:
+              type: boolean
+        status:
+          type: string
+        balance:
+          type: number
+        userId:
+          type: integer
+          format: int64
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+      - password
+      - username
+    JwtResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        type:
+          type: string
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        role:
+          type: string
+    CreateUserRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          maxLength: 50
+          minLength: 3
+        password:
+          type: string
+          maxLength: 2147483647
+          minLength: 6
+          pattern: "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^a-zA-Z0-9])\\S{6,}$"
+        role:
+          type: string
+      required:
+      - password
+      - role
+      - username
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        role:
+          type: string
+        enabled:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+    CreateCardRequest:
+      type: object
+      properties:
+        cardNumber:
+          type: string
+          pattern: "[0-9]{16}"
+        expiryDate:
+          type: object
+          properties:
+            year:
+              type: integer
+              format: int32
+            month:
+              type: string
+              enum:
+              - JANUARY
+              - FEBRUARY
+              - MARCH
+              - APRIL
+              - MAY
+              - JUNE
+              - JULY
+              - AUGUST
+              - SEPTEMBER
+              - OCTOBER
+              - NOVEMBER
+              - DECEMBER
+            monthValue:
+              type: integer
+              format: int32
+            leapYear:
+              type: boolean
+        balance:
+          type: number
+        userId:
+          type: integer
+          format: int64
+      required:
+      - balance
+      - cardNumber
+      - expiryDate
+      - userId
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: bearerAuth
+      scheme: bearer
+      bearerFormat: JWT
